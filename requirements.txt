@@ -1,0 +1,7 @@
+# 탐색 노트북·src (Colab에는 기본 설치되어 있음)
+pandas>=2.0
+matplotlib>=3.7
+
+# 로컬 서빙
+fastapi>=0.110
+uvicorn>=0.29

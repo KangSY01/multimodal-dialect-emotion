@@ -1,0 +1,28 @@
+# ===== AI Hub 데이터: 라이선스상 절대 커밋 금지 =====
+data/
+*.wav
+*.zip
+*.tar
+*.part*
+*.npy
+
+# 모델 가중치
+*.pt
+*.ckpt
+
+# 비밀값
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Jupyter / IDE
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
