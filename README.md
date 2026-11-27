@@ -16,9 +16,10 @@
 
 ```
 notebooks/        Colab 노트북
-  00_download.ipynb   AI Hub → Google Drive 다운로드·압축 해제 (CPU 런타임)
+  00_download.ipynb   Drive의 원본 zip → Colab 로컬 압축 해제 (CPU 런타임)
   01_explore.ipynb    감정 csv / 방언 json 탐색, 그래프 저장
-src/              노트북 공용 파이썬 모듈 (data.py: csv·json 로딩)
+  02_preprocess.ipynb 방언 문장 표·평가셋·감정 데이터 분할 (CPU 런타임)
+src/              노트북 공용 파이썬 모듈 (data.py: csv·json 로딩, 전처리 함수)
 serving/          로컬 서빙 (FastAPI app.py, Dockerfile, k8s.yaml)
 reports/figures/  탐색·실험 그래프
 ```
@@ -28,11 +29,20 @@ reports/figures/  탐색·실험 그래프
 1. 이 저장소를 Google Drive에 clone
    ```
    /content/drive/MyDrive/mmdl/multimodal-dialect-emotion   ← 저장소
-   /content/drive/MyDrive/mmdl/data                         ← 데이터 (저장소 밖)
+   /content/drive/MyDrive/mmdl/data/raw                     ← 원본 zip (저장소 밖)
+   /content/drive/MyDrive/mmdl/processed                    ← 전처리 결과 (저장소 밖)
    ```
-2. AI Hub에서 세 데이터셋 이용 신청 후 승인, 마이페이지에서 API 키 발급
-3. `notebooks/00_download.ipynb` — **CPU 런타임**. 설정 셀에 datasetkey/filekey 입력 → API 키는 실행 시 `getpass`로 입력
-4. `notebooks/01_explore.ipynb` — CPU 런타임. 첫 실행 후 출력된 컬럼 목록을 보고 설정 셀의 `EMO_LABEL_COL`, `EMO_TEXT_COL`, json glob을 맞춤
+2. AI Hub 웹사이트에서 세 데이터셋 이용 신청·승인 후 파일 다운로드
+3. 압축을 풀지 말고 zip 그대로 Drive raw 폴더에 업로드
+   ```
+   raw/dialect_gs/  gs_wav.zip, gs_label.zip
+   raw/dialect_cc/  cc_wav.zip, cc_label.zip
+   raw/emotion/     emotion.zip, emotion.csv
+   ```
+4. `notebooks/00_download.ipynb` — **CPU 런타임**. Colab 로컬(`/content/data`)에 압축 해제. 로컬은 세션이 끝나면 지워지므로 세션마다 다시 실행
+5. `notebooks/02_preprocess.ipynb` — **CPU 런타임**. `dialect_all.csv`, `eval_set.csv`, `emotion_meta.csv`, 평가셋 문장 wav(`segments/`)를 processed 폴더에 저장. 첫 실행 후 `emotion_tag` 출력을 보고 설정 셀의 `NEUTRAL_TAG`를 맞춤
+
+(선택 사항) 웹 대신 AI Hub API(aihubshell)로 받으려면 00 노트북 맨 아래 섹션을 사용하세요.
 
 경로는 각 노트북 맨 위 **설정 셀**에서 한 번에 바꿀 수 있습니다.
 
